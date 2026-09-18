@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel da Vida — Set a Dez 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f2ea;
+    --card-bg:#fffdf9;
+    --text:#2c2530;
+    --muted:#8a7f8a;
+    --border:#ecdfd0;
+    --accent:#8560c9;
+    --accent-soft:#efe6fb;
+    --shadow-sm: 0 1px 2px rgba(40,30,45,0.06);
+    --shadow: 0 8px 24px rgba(60,45,60,0.09);
+    --heat0:#f1e8fa;
+    --heat1:#dcc8ef;
+    --heat2:#c2a3e3;
+    --heat3:#a57ed6;
+    --heat4:#8560c9;
+    --good:#3f9e63;
+    --radius-sm:12px;
+    --radius-lg:22px;
+    --font-display:"Fraunces", Georgia, "Times New Roman", serif;
+    --font-body:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    --p-saude-bg:#ffd9e2; --p-saude-ac:#d15d78;
+    --p-financas-bg:#d7f2df; --p-financas-ac:#3f9e63;
+    --p-carreira-bg:#d6e7fb; --p-carreira-ac:#3f7fc9;
+    --p-mente-bg:#e6ddfa; --p-mente-ac:#8560c9;
+    --p-leitura-bg:#fdf0c4; --p-leitura-ac:#c99a2e;
+    --p-sono-bg:#dedbf7; --p-sono-ac:#6d5fc2;
+    --p-emotions-bg:#ffdcec; --p-emotions-ac:#c15c93;
+    --p-overview-bg:#e9e6f5; --p-overview-ac:#6a63a0;
+    --p-metas21-bg:#ffe4c9; --p-metas21-ac:#d97f3d;
+
+    --gauge-humor:#c15c93; --gauge-energia:#c99a2e; --gauge-calma:#3f9e63;
+    --tag-light-bg:#d7f2df; --tag-light-ac:#3f9e63;
+    --tag-hard-bg:#ffd9e2; --tag-hard-ac:#d15d78;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1d1922; --card-bg:#262130; --text:#f1ecf5; --muted:#a99fb0;
+      --border:#3a3244; --accent:#b79ce8; --accent-soft:#332c47;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow: 0 8px 24px rgba(0,0,0,0.4);
+      --heat0:#2e2740; --heat1:#40355c; --heat2:#5a4680; --heat3:#7357ad; --heat4:#8f6fd6;
+      --good:#7fcf9c;
+
+      --p-saude-bg:#3a2430; --p-saude-ac:#e6899f;
+      --p-financas-bg:#223326; --p-financas-ac:#7fcf9c;
+      --p-carreira-bg:#1f2c3d; --p-carreira-ac:#86b3e8;
+      --p-mente-bg:#2c2440; --p-mente-ac:#b79ce8;
+      --p-leitura-bg:#362d1c; --p-leitura-ac:#e0bb5e;
+      --p-sono-bg:#241f3d; --p-sono-ac:#a89ce8;
+      --p-emotions-bg:#3a2432; --p-emotions-ac:#e690b8;
+      --p-overview-bg:#292440; --p-overview-ac:#a89ce0;
+      --p-metas21-bg:#3d2a1c; --p-metas21-ac:#e8a468;
+
+      --gauge-humor:#e690b8; --gauge-energia:#e0bb5e; --gauge-calma:#7fcf9c;
+      --tag-light-bg:#223326; --tag-light-ac:#7fcf9c;
+      --tag-hard-bg:#3a2430; --tag-hard-ac:#e6899f;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family: var(--font-body);
+    background:var(--bg); color:var(--text); padding: 22px 16px 60px;
+  }
+  .wrap{max-width:900px;margin:0 auto;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* Hero */
+  header.hero{ margin-bottom:18px; }
+  .hero-top{display:flex; align-items:flex-start; justify-content:space-between; gap:16px;}
+  .hero-title-row{display:flex; align-items:center; gap:12px; flex:1; min-width:0;}
+  .hero-title-row h1{
+    font-family:var(--font-display); font-weight:600; font-size:1.9rem;
+    margin:0; letter-spacing:-0.01em; line-height:1.08;
+  }
+  .hamburger{
+    width:46px; height:46px; border-radius:14px; border:1px solid var(--border);
+    background:var(--card-bg); font-size:1.25rem; cursor:pointer; box-shadow:var(--shadow-sm);
+    flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  }
+  .hero-sub{color:var(--muted); margin:10px 0 16px; font-size:0.9rem; line-height:1.45; max-width:52ch;}
+  .hero-bottom{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+  .hero-stats{display:flex; gap:10px; flex-wrap:wrap;}
+  .hero-stat{
+    background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:9px 16px; box-shadow:var(--shadow-sm); text-align:left; min-width:96px;
+  }
+  .hero-stat .num{font-family:var(--font-display); font-weight:600; font-size:1.2rem; color:var(--accent); display:block;}
+  .hero-stat .lbl{font-size:0.72rem; color:var(--muted);}
+
+  .hero-ring-wrap{position:relative; width:96px; height:96px; flex-shrink:0;}
+  svg.ring{width:96px;height:96px; transform:rotate(-90deg); display:block;}
+  .ring-track{fill:none; stroke:var(--border); stroke-width:10;}
+  .ring-fill{fill:none; stroke:var(--accent); stroke-width:10; stroke-linecap:round; transition: stroke-dashoffset .6s ease;}
+  .ring-center{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:0 6px;
+  }
+  .ring-center .pct{font-family:var(--font-display); font-weight:700; font-size:1.3rem; line-height:1;}
+  .ring-center .lbl{font-size:0.58rem; color:var(--muted); line-height:1.2; margin-top:2px;}
+
+  /* Section pill (current tab indicator) */
+  .section-pill{
+    display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:999px;
+    font-weight:700; font-size:0.92rem; margin-bottom:18px; box-shadow:var(--shadow-sm);
+  }
+
+  /* Drawer */
+  .drawer-overlay{
+    position:fixed; inset:0; background:rgba(30,20,35,.38);
+    opacity:0; visibility:hidden; transition:opacity .2s; z-index:40;
+  }
+  .drawer-overlay.open{opacity:1; visibility:visible;}
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(310px,86vw);
+    background:var(--card-bg); box-shadow:-10px 0 34px rgba(0,0,0,.18);
+    transform:translateX(100%); transition:transform .25s ease; z-index:50;
+    display:flex; flex-direction:column; padding:22px 18px;
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+  .drawer-header h2{font-family:var(--font-display); font-size:1.25rem; margin:0;}
+  .drawer-close{
+    width:38px; height:38px; border-radius:11px; border:1px solid var(--border);
+    background:var(--bg); cursor:pointer; font-size:1rem;
+  }
+  .drawer-list{display:flex; flex-direction:column; gap:9px; overflow-y:auto;}
+  .drawer-item{
+    display:flex; align-items:center; gap:11px; padding:13px 15px; border-radius:15px;
+    border:1px solid var(--border); background:var(--bg); cursor:pointer; font-weight:700; font-size:0.94rem;
+    transition:transform .1s;
+  }
+  .drawer-item:hover{ transform: translateX(-2px); }
+  .drawer-item .dico{font-size:1.3rem;}
+
+  /* Sub-tabs (segmented control inside panels) */
+  .subtabs{
+    display:flex; gap:5px; margin-bottom:20px; background:var(--bg); padding:4px;
+    border-radius:999px; border:1px solid var(--border);
+  }
+  .subtab-btn{
+    flex:1; text-align:center; padding:9px 8px; border-radius:999px; font-size:0.82rem;
+    font-weight:700; color:var(--muted); cursor:pointer; border:none; background:transparent;
+    transition:background .15s, color .15s;
+  }
+  .subtab-btn.active{color:#fff;}
+
+  /* Panels */
+  .panel{
+    background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow); padding:24px 22px 22px; margin-bottom:0;
+  }
+  .panel h2{margin:0 0 4px;font-size:1.2rem; font-family:var(--font-display); font-weight:600; display:flex; align-items:center; gap:8px;}
+  .panel .sub{color:var(--muted);font-size:0.86rem;margin-bottom:18px; line-height:1.5;}
+  .chart-holder{position:relative; height:230px; margin-top:6px;}
+  .chart-holder.small{height:160px;}
+
+  .pillar-badgehead{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; gap:10px; flex-wrap:wrap;
+  }
+  .pillar-badgehead .big-icon{
+    font-size:2rem; width:58px; height:58px; display:flex; align-items:center; justify-content:center;
+    border-radius:17px; background:var(--pillar-bg, var(--accent-soft));
+  }
+  .pillar-badgehead .title{font-size:1.32rem; font-weight:600; font-family:var(--font-display);}
+  .badge{
+    font-size:0.76rem; font-weight:700; padding:5px 13px; border-radius:999px;
+    background:var(--pillar-bg, var(--accent-soft)); color:var(--pillar-ac, var(--accent)); white-space:nowrap;
+  }
+
+  label.field-label{
+    font-size:0.78rem; color:var(--muted);
+    margin-bottom:7px; display:block; font-weight:700;
+  }
+  textarea, input[type=text], input[type=number]{
+    width:100%; resize:vertical; font-family:inherit; font-size:0.9rem;
+    padding:11px 13px; border-radius:var(--radius-sm); border:1px solid var(--border);
+    background:var(--bg); color:var(--text); margin-bottom:16px;
+  }
+  textarea{min-height:52px; white-space:pre-wrap;}
+  textarea:focus, input:focus, select:focus{outline:2px solid var(--pillar-ac, var(--accent)); outline-offset:1px;}
+
+  .habits{display:flex; flex-direction:column; gap:10px; margin-top:2px; margin-bottom:16px;}
+  .habit-row{
+    display:flex; align-items:center; gap:12px; background:var(--bg);
+    border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 14px;
+  }
+  .habit-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--pillar-ac, var(--accent)); flex-shrink:0; cursor:pointer;}
+  .habit-row span{flex:1; font-size:0.92rem;}
+  .habit-row .rm{cursor:pointer; color:var(--muted); font-size:0.95rem; padding:3px 8px; border-radius:8px;}
+  .habit-row .rm:hover{background:var(--pillar-bg, var(--accent-soft)); color:var(--pillar-ac, var(--accent));}
+
+  .add-habit{display:flex; gap:8px; margin-top:4px; margin-bottom:6px;}
+  .add-habit input{flex:1; margin-bottom:0;}
+  .add-habit button{
+    border:none; background:var(--pillar-ac, var(--accent)); color:white; border-radius:var(--radius-sm);
+    padding:0 18px; font-size:0.95rem; cursor:pointer; font-weight:700;
+  }
+  .add-habit button:hover{opacity:.88;}
+
+  .heatmap{display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;}
+  .heat-cell{width:22px;height:22px;border-radius:8px;background:var(--heat0);}
+  .heat-cell[data-lvl="1"]{background:var(--heat1);}
+  .heat-cell[data-lvl="2"]{background:var(--heat2);}
+  .heat-cell[data-lvl="3"]{background:var(--heat3);}
+  .heat-cell[data-lvl="4"]{background:var(--heat4);}
+  .heat-caption{font-size:0.78rem;color:var(--muted); margin-top:10px;}
+
+  .divider{border-top:1px solid var(--border); margin:22px 0 20px;}
+
+  .metric-row{display:flex; gap:8px; align-items:flex-start;}
+  .metric-row input{flex:1;}
+  .metric-row button{
+    border:none; background:var(--pillar-ac, var(--accent)); color:white; border-radius:var(--radius-sm);
+    padding:11px 18px; font-size:0.86rem; cursor:pointer; font-weight:700; white-space:nowrap; height:44px;
+  }
+  .metric-summary{display:flex; gap:16px; align-items:baseline; margin: 6px 0 12px;}
+  .metric-summary .big{font-size:1.55rem; font-weight:700; font-family:var(--font-display); color:var(--pillar-ac, var(--accent));}
+  .metric-summary .delta{font-size:0.82rem; color:var(--muted);}
+
+  .progress-bar{
+    height:13px; border-radius:9px; background:var(--bg); border:1px solid var(--border);
+    overflow:hidden; margin-top:10px;
+  }
+  .progress-bar .fill{height:100%; background:var(--good); transition:width .3s; border-radius:9px;}
+  .progress-label{font-size:0.82rem; color:var(--muted); margin-top:8px; margin-bottom:14px;}
+
+  .mood-row{display:flex; gap:8px; justify-content:space-between; margin: 4px 0 14px;}
+  select{
+    width:100%; padding:11px 13px; border-radius:var(--radius-sm); border:1px solid var(--border);
+    background:var(--bg); color:var(--text); font-size:0.9rem; margin-bottom:16px; font-family:inherit;
+  }
+  .emotion-list{display:flex; flex-direction:column; gap:8px; margin-top:10px;}
+  .emotion-entry{
+    display:flex; gap:12px; align-items:flex-start; background:var(--bg);
+    border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 14px; font-size:0.84rem;
+  }
+  .emotion-entry .date{color:var(--muted); font-size:0.76rem; min-width:78px;}
+  .emotion-entry .entry-tags{color:var(--muted); font-size:0.78rem; margin-top:3px;}
+
+  /* Gastos e faturas (Finanças) */
+  .expense-summary{margin:2px 0 18px;}
+  .expense-summary .big{font-size:1.6rem; font-weight:700; font-family:var(--font-display); color:var(--pillar-ac,var(--accent));}
+  .expense-summary .lbl{font-size:0.8rem; color:var(--muted); margin-top:2px;}
+  .expense-add-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:flex-end;}
+  .expense-add-row input[type=text]{flex:1.5; min-width:130px; margin-bottom:0;}
+  .expense-add-row input[type=number]{flex:1; min-width:90px; margin-bottom:0;}
+  .expense-add-row select{flex:1.2; min-width:120px; margin-bottom:0;}
+  .expense-add-row button{flex-shrink:0; border:none; background:var(--pillar-ac,var(--accent)); color:#fff; border-radius:var(--radius-sm); padding:0 18px; height:44px; font-weight:700; cursor:pointer;}
+  .expense-list{display:flex; flex-direction:column; gap:8px;}
+  .expense-row{
+    display:flex; align-items:center; gap:10px; background:var(--bg); border:1px solid var(--border);
+    border-radius:var(--radius-sm); padding:12px 14px; font-size:0.87rem;
+  }
+  .expense-row .info{flex:1; min-width:0;}
+  .expense-row .desc{font-weight:600;}
+  .expense-row .meta{font-size:0.76rem; color:var(--muted); margin-top:2px;}
+  .expense-row .val{font-family:var(--font-display); font-weight:700; color:var(--pillar-ac,var(--accent)); white-space:nowrap;}
+  .expense-row .rm{cursor:pointer; color:var(--muted); font-size:0.95rem; padding:3px 6px; border-radius:8px;}
+  .expense-row .rm:hover{background:var(--pillar-bg,var(--accent-soft)); color:var(--pillar-ac,var(--accent));}
+
+  .card-row{background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px 17px; margin-bottom:14px;}
+  .card-row-head{display:flex; justify-content:space-between; align-items:center; gap:10px;}
+  .card-row-head .cname{font-weight:700; font-family:var(--font-display); font-size:1.02rem;}
+  .card-row-head .rm{cursor:pointer; color:var(--muted); font-size:0.95rem; padding:3px 6px;}
+  .card-fatura-val{font-family:var(--font-display); font-weight:700; font-size:1.5rem; margin:10px 0 12px; color:var(--pillar-ac,var(--accent));}
+  .card-fatura-val small{display:block; font-size:0.72rem; font-weight:600; color:var(--muted); font-family:var(--font-body); margin-bottom:3px;}
+  .card-row-actions button{
+    border:1px solid var(--pillar-ac,var(--accent)); background:transparent; color:var(--pillar-ac,var(--accent));
+    border-radius:var(--radius-sm); padding:8px 15px; font-size:0.82rem; cursor:pointer; font-weight:700;
+  }
+  .card-row-actions button:hover{background:var(--pillar-bg,var(--accent-soft));}
+  .add-card-row{display:flex; gap:8px; margin-top:4px; flex-wrap:wrap;}
+  .add-card-row input{flex:1; margin-bottom:0;}
+  .add-card-row button{
+    border:none; background:var(--pillar-ac,var(--accent)); color:#fff; border-radius:var(--radius-sm);
+    padding:0 18px; font-weight:700; cursor:pointer;
+  }
+  .empty-hint{font-size:0.86rem; color:var(--muted); margin-bottom:14px; line-height:1.5;}
+
+  /* Gauges de emoção */
+  .gauges-row{display:flex; gap:16px; justify-content:space-between; margin: 4px 0 24px; flex-wrap:wrap;}
+  .gauge{flex:1; min-width:130px; text-align:center; --gc: var(--accent);}
+  .gauge-arc-wrap{position:relative; width:100%; max-width:150px; margin:0 auto;}
+  .gauge-arc{width:100%; display:block;}
+  .gauge-track{fill:none; stroke:var(--border); stroke-width:9; stroke-linecap:round;}
+  .gauge-fill{fill:none; stroke:var(--gc); stroke-width:9; stroke-linecap:round; transition: stroke-dashoffset .5s ease;}
+  .gauge-face{margin-top:-30px; display:flex; flex-direction:column; align-items:center;}
+  .gauge-emoji{font-size:1.8rem; line-height:1;}
+  .gauge-val{font-size:0.76rem; color:var(--muted); margin-top:3px;}
+  .gauge-label{font-family:var(--font-display); font-weight:600; margin-top:10px; font-size:1rem;}
+  .gauge-pips{display:flex; gap:6px; justify-content:center; margin-top:11px;}
+  .gauge-pip{
+    width:23px; height:23px; border-radius:50%; border:1px solid var(--border);
+    background:var(--card-bg); cursor:pointer; font-size:0; padding:0;
+    transition:background .15s, border-color .15s, transform .1s;
+  }
+  .gauge-pip:hover{ transform: scale(1.12); }
+  .gauge-pip.active{ background:var(--gc); border-color:var(--gc); }
+  .gauge-pip:focus-visible{outline:2px solid var(--gc); outline-offset:2px;}
+
+  .tag-section-title{font-size:0.82rem; color:var(--muted); margin:0 0 10px; font-weight:700;}
+  .tag-group{display:flex; flex-wrap:wrap; gap:9px; margin-bottom:22px;}
+  .tag-chip{
+    padding:8px 15px; border-radius:999px; border:1px solid var(--border);
+    background:var(--bg); font-size:0.84rem; cursor:pointer; color:var(--text);
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .tag-chip.light.active{background:var(--tag-light-bg); border-color:var(--tag-light-ac); color:var(--tag-light-ac);}
+  .tag-chip.hard.active{background:var(--tag-hard-bg); border-color:var(--tag-hard-ac); color:var(--tag-hard-ac);}
+  .tag-chip:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+  /* Today-across-pillars quick check (Overview) */
+  .today-check{display:flex; flex-direction:column; gap:12px;}
+  .today-check-row{
+    display:flex; align-items:center; gap:12px; background:var(--pillar-bg, var(--bg));
+    border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 15px; flex-wrap:wrap;
+  }
+  .today-check-row .pillar-tag{
+    display:flex; align-items:center; gap:7px; font-weight:700; font-size:0.87rem;
+    min-width:150px; color:var(--pillar-ac, var(--accent));
+  }
+  .today-check-boxes{display:flex; gap:7px; flex-wrap:wrap; flex:1;}
+  .mini-habit{
+    display:flex; align-items:center; gap:6px; background:var(--card-bg); border:1px solid var(--border);
+    border-radius:999px; padding:5px 11px 5px 7px; font-size:0.78rem; cursor:pointer;
+    transition:background .15s,border-color .15s; user-select:none;
+  }
+  .mini-habit input{width:15px;height:15px;accent-color:var(--pillar-ac, var(--accent));cursor:pointer;}
+  .mini-habit.done{border-color:var(--pillar-ac, var(--accent));}
+  .today-check-row .pct-tag{font-size:0.76rem; color:var(--muted); margin-left:auto; white-space:nowrap;}
+
+  footer.actions{text-align:center; margin-top:28px;}
+  footer.actions .autosave-note{
+    font-size:0.79rem; color:var(--muted); margin:0 0 16px; line-height:1.55;
+  }
+  .footer-btns{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+  footer.actions button, .file-btn{
+    border:1px solid var(--border); background:var(--card-bg); color:var(--muted);
+    border-radius:999px; padding:10px 20px; font-size:0.82rem; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  footer.actions button:hover, .file-btn:hover{color:var(--text);}
+
+  @media(max-width:560px){
+    .gauges-row{ flex-direction:column; align-items:center; }
+    .gauge{ max-width:220px; }
+    .today-check-row{ flex-direction:column; align-items:flex-start; }
+    .today-check-row .pct-tag{ margin-left:0; }
+    .hero-top{ flex-wrap:wrap; }
+  }
+
+  /* Sincronização Firebase */
+  .fb-overlay{
+    position:fixed; inset:0; background:var(--bg); display:flex; align-items:center;
+    justify-content:center; z-index:60; padding:20px;
+  }
+  .fb-overlay.hidden{display:none;}
+  .fb-card{
+    background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow); padding:30px 26px; max-width:360px; width:100%; text-align:center;
+  }
+  .fb-card h2{font-family:var(--font-display); margin:0 0 10px; font-size:1.35rem;}
+  .fb-card p{color:var(--muted); font-size:0.86rem; margin:0 0 20px; line-height:1.5;}
+  .fb-card input{margin-bottom:12px;}
+  .fb-card .fb-actions{display:flex; gap:8px; margin-top:6px;}
+  .fb-card .fb-actions button{flex:1; border:none; border-radius:var(--radius-sm); padding:12px; font-weight:700; cursor:pointer; font-size:0.9rem;}
+  .fb-primary{background:var(--accent); color:#fff;}
+  .fb-secondary{background:var(--bg); color:var(--text); border:1px solid var(--border) !important;}
+  .fb-skip{display:block; margin:16px auto 0; font-size:0.82rem; color:var(--muted); cursor:pointer; text-decoration:underline; background:none; border:none;}
+  .fb-error{color:#c0392b; font-size:0.82rem; margin-top:2px; min-height:18px;}
+  .fb-status{font-size:0.8rem; color:var(--muted); margin-top:14px;}
+</style>
+</head>
+<body>
+<div class="fb-overlay hidden" id="fbOverlay">
+  <div class="fb-card">
+    <h2>🔄 Sincronizar entre aparelhos</h2>
+    <p>Entre com e-mail e senha pra acessar os mesmos dados em qualquer celular ou computador.</p>
+    <input type="text" id="fbEmail" placeholder="E-mail" autocomplete="email">
+    <input type="password" id="fbPass" placeholder="Senha (mín. 6 caracteres)" autocomplete="current-password">
+    <div class="fb-error" id="fbError"></div>
+    <div class="fb-actions">
+      <button class="fb-secondary" id="fbSignupBtn" type="button">Criar conta</button>
+      <button class="fb-primary" id="fbLoginBtn" type="button">Entrar</button>
+    </div>
+    <button class="fb-skip" id="fbSkipBtn" type="button">Continuar sem sincronizar</button>
+    <div class="fb-status" id="fbStatus"></div>
+  </div>
+</div>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-top">
+      <div class="hero-title-row">
+        <h1>Painel da Vida</h1>
+      </div>
+      <button id="menuBtn" class="hamburger" aria-label="Abrir menu">☰</button>
+    </div>
+    <p class="hero-sub" id="dateRangeLabel"></p>
+    <div class="hero-bottom">
+      <div class="hero-ring-wrap">
+        <svg class="ring" viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="50"></circle>
+          <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50"></circle>
+        </svg>
+        <div class="ring-center">
+          <span class="pct" id="ringPct">0%</span>
+          <span class="lbl">hábitos hoje</span>
+        </div>
+      </div>
+      <div class="hero-stats" id="statsRow"></div>
+    </div>
+  </header>
+
+  <div class="section-pill" id="sectionPill"></div>
+
+  <div id="tabContent"></div>
+
+  <footer class="actions">
+    <p class="autosave-note">💾 Tudo é salvo sozinho neste navegador a cada clique — sem botão de salvar. Um novo dia começa automaticamente quando a data virar. Os dados não sincronizam sozinhos entre celular e computador — use "Exportar backup" aqui e "Importar backup" no outro aparelho para levar seus dados com você.</p>
+    <div class="footer-btns">
+      <button id="exportBtn">⬇️ Exportar backup</button>
+      <label class="file-btn">⬆️ Importar backup<input type="file" id="importFile" accept="application/json" style="display:none;"></label>
+      <button id="resetBtn">Resetar todos os dados</button>
+    </div>
+  </footer>
+</div>
+
+<div id="drawerOverlay" class="drawer-overlay"></div>
+<nav id="drawer" class="drawer">
+  <div class="drawer-header">
+    <h2>Ir para...</h2>
+    <button id="closeDrawer" class="drawer-close" aria-label="Fechar menu">✕</button>
+  </div>
+  <div class="drawer-list" id="drawerList"></div>
+</nav>
+
+<script type="module">
+  // ====== CONFIGURAÇÃO DO FIREBASE ======
+  // Cole aqui o objeto "firebaseConfig" que o Firebase te dá ao criar o app Web.
+  // Enquanto estiver com "COLE_AQUI", o painel funciona só localmente (sem sincronizar).
+  const FIREBASE_VERSION = "10.12.2";
+  const firebaseConfig = {
+    apiKey: "AIzaSyAqUkF_mgSq8-JoksKhV62L3041EPcAk-k",
+    authDomain: "diariodebordo-63d9e.firebaseapp.com",
+    projectId: "diariodebordo-63d9e",
+    storageBucket: "diariodebordo-63d9e.firebasestorage.app",
+    messagingSenderId: "441098669056",
+    appId: "1:441098669056:web:162d710f3976f44ec31ce5"
+  };
+  // =======================================
+
+  window.__fb = { ready:false };
+
+  if(firebaseConfig.apiKey && firebaseConfig.apiKey !== "COLE_AQUI"){
+    try{
+      const base = "https://www.gstatic.com/firebasejs/"+FIREBASE_VERSION+"/";
+      const { initializeApp } = await import(base+"firebase-app.js");
+      const { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } =
+        await import(base+"firebase-auth.js");
+      const { getFirestore, doc, getDoc, setDoc } = await import(base+"firebase-firestore.js");
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      window.__fb.ready = true;
+      window.__fb.auth = auth;
+      window.__fb.signIn = (email, pass) => signInWithEmailAndPassword(auth, email, pass);
+      window.__fb.signUp = (email, pass) => createUserWithEmailAndPassword(auth, email, pass);
+      window.__fb.save = async (payload) => {
+        if(!auth.currentUser) return;
+        try{ await setDoc(doc(db, "painelVida", auth.currentUser.uid), payload); }
+        catch(e){ console.warn("Firebase: falha ao salvar na nuvem", e); }
+      };
+      window.__fb.load = async () => {
+        if(!auth.currentUser) return null;
+        try{
+          const snap = await getDoc(doc(db, "painelVida", auth.currentUser.uid));
+          return snap.exists() ? snap.data() : null;
+        }catch(e){ console.warn("Firebase: falha ao carregar da nuvem", e); return null; }
+      };
+
+      onAuthStateChanged(auth, (user) => {
+        window.dispatchEvent(new CustomEvent("fb-auth-changed", { detail:{ user } }));
+      });
+      window.dispatchEvent(new CustomEvent("fb-module-ready"));
+    }catch(e){
+      console.warn("Firebase não pôde ser carregado — o painel vai funcionar só localmente.", e);
+      window.__fb.ready = false;
+      window.dispatchEvent(new CustomEvent("fb-module-ready"));
+    }
+  } else {
+    window.dispatchEvent(new CustomEvent("fb-module-ready"));
+  }
+</script>
+<script>
+(function(){
+  const STORAGE_KEY = "painelVidaData_v3";
+  const START_DATE = "2026-09-17";
+  const END_DATE = "2026-12-31";
+  const RING_CIRC = 2 * Math.PI * 50;
+  const CONTEXTS = ["Geral","Relacionamento","Trabalho","Saúde","Família","Outro"];
+
+  const GAUGES = [
+    { id:"mood", label:"Humor", color:"var(--gauge-humor)",
+      levels:[ {v:1,e:"😞",t:"Muito baixo"}, {v:2,e:"😕",t:"Baixo"}, {v:3,e:"😐",t:"Neutro"}, {v:4,e:"🙂",t:"Bom"}, {v:5,e:"😄",t:"Ótimo"} ] },
+    { id:"energy", label:"Energia", color:"var(--gauge-energia)",
+      levels:[ {v:1,e:"🪫",t:"Exausta"}, {v:2,e:"😴",t:"Cansada"}, {v:3,e:"😐",t:"Estável"}, {v:4,e:"⚡",t:"Disposta"}, {v:5,e:"🔥",t:"Cheia de energia"} ] },
+    { id:"calm", label:"Calma", color:"var(--gauge-calma)",
+      levels:[ {v:1,e:"🌪️",t:"Muito agitada"}, {v:2,e:"😣",t:"Tensa"}, {v:3,e:"😐",t:"Ok"}, {v:4,e:"🌿",t:"Tranquila"}, {v:5,e:"🧘",t:"Em paz"} ] }
+  ];
+  const TAGS_LIGHT = ["Grata","Tranquila","Animada","Em paz","Esperançosa","Orgulhosa"];
+  const TAGS_HARD = ["Ansiosa","Esgotada","Irritada","Triste","Sobrecarregada","Insegura"];
+
+  const PILLAR_COLORS = {
+    metas21:{bg:"var(--p-metas21-bg)", ac:"var(--p-metas21-ac)"},
+    saude:{bg:"var(--p-saude-bg)", ac:"var(--p-saude-ac)"},
+    financas:{bg:"var(--p-financas-bg)", ac:"var(--p-financas-ac)"},
+    carreira:{bg:"var(--p-carreira-bg)", ac:"var(--p-carreira-ac)"},
+    mente:{bg:"var(--p-mente-bg)", ac:"var(--p-mente-ac)"},
+    leitura:{bg:"var(--p-leitura-bg)", ac:"var(--p-leitura-ac)"},
+    sono:{bg:"var(--p-sono-bg)", ac:"var(--p-sono-ac)"},
+    emotions:{bg:"var(--p-emotions-bg)", ac:"var(--p-emotions-ac)"},
+    overview:{bg:"var(--p-overview-bg)", ac:"var(--p-overview-ac)"}
+  };
+
+  const METAS21_PILLAR = { id:"metas21", icon:"🎯", name:"Metas 21 Dias",
+      goal:"Meta 1 — Inglês: 20-30min, 5x/semana (mín. 15 sessões nos 21 dias)\nMeta 2 — Automatizar 1 processo de trabalho até o dia 21\nMeta 3 — Reservar 30min/semana só pra mim (3 blocos nos 21 dias)",
+      nextSteps:"1º passo Meta 1: horário fixo no calendário hoje — 1ª sessão até amanhã\n1º passo Meta 2: listar 3 processos candidatos hoje/amanhã — escolhido até o dia 3, funcionando até o dia 21\n1º passo Meta 3: escolher dia/horário fixo da semana hoje — 1º bloco até domingo",
+      habits:[
+        {id:"h1", text:"🌅 Água + respiração ao acordar"},
+        {id:"h2", text:"🎯 Escolhi o foco principal do dia"},
+        {id:"h3", text:"📖 Inglês 20-30 min (Meta 1)"},
+        {id:"h4", text:"⚙️ Passo na automação do processo (Meta 2)"},
+        {id:"h5", text:"💛 Autocuidado / momento só meu (Meta 3)"},
+        {id:"h6", text:"🌙 Revisão rápida da noite feita"}
+      ]};
+
+  const DEFAULT_PILLARS = [
+    METAS21_PILLAR,
+    { id:"saude", icon:"💪", name:"Saúde",
+      goal:"Perder gordura e ganhar massa muscular — desafio de 21 dias de treino e alimentação em andamento",
+      nextSteps:"Concluir o desafio de 21 dias; manter treino em jejum e acompanhar medidas",
+      habits:[
+        {id:"h1", text:"Treino em jejum (acordar 4:40)"},
+        {id:"h2", text:"Seguir alimentação do desafio de 21 dias"},
+        {id:"h3", text:"Beber mais água"}
+      ],
+      hasMetric:true, metricLabel:"Peso/medida", metricUnit:"kg ou cm", metricEntries:[] },
+
+    { id:"financas", icon:"💰", name:"Finanças",
+      goal:"Guardar dinheiro para a viagem a Toronto (26/11 a 06/12 — aniversário em 02/12) e começar uma reserva de emergência (hoje zero)",
+      nextSteps:"Controlar gastos no cartão; buscar renda extra home office (negócio próprio ou nova carreira)",
+      habits:[
+        {id:"h1", text:"Registrar gastos do dia"},
+        {id:"h2", text:"Evitar gasto por impulso no cartão"},
+        {id:"h3", text:"Guardar valor para a viagem/reserva"}
+      ],
+      hasSavings:true, savingsGoal:0, savingsEntries:[],
+      hasExpenses:true,
+      cards:[
+        {id:"bradesco", name:"Bradesco", closingDay:26, dueDay:5},
+        {id:"c6", name:"C6 Bank", closingDay:25, dueDay:1},
+        {id:"itau", name:"Itaú Pass", closingDay:25, dueDay:2},
+        {id:"caixa", name:"Caixa", closingDay:23, dueDay:3}
+      ],
+      expenses:[
+    {id:"seed0", desc:"Loja Oficial Subsolo (5/5)", value:59.4, date:"2026-03-29", ts:1774785600000, cardId:"caixa"},
+    {id:"seed1", desc:"Cross Barra (4/6)", value:197.0, date:"2026-05-06", ts:1778068800000, cardId:"itau"},
+    {id:"seed2", desc:"HTM*What If Cl (4/6)", value:168.84, date:"2026-05-11", ts:1778500800000, cardId:"itau"},
+    {id:"seed3", desc:"Pague Menos (4/4)", value:121.17, date:"2026-05-12", ts:1778587200000, cardId:"itau"},
+    {id:"seed4", desc:"Atalaia Rações (3/3)", value:41.3, date:"2026-05-26", ts:1779796800000, cardId:"itau"},
+    {id:"seed5", desc:"Vindi PixelWork (3/6)", value:133.35, date:"2026-05-29", ts:1780056000000, cardId:"caixa"},
+    {id:"seed6", desc:"Prata da Lua Joias Exc (3/3)", value:158.33, date:"2026-06-12", ts:1781265600000, cardId:"c6"},
+    {id:"seed7", desc:"Petz Digital (3/3)", value:113.03, date:"2026-06-17", ts:1781697600000, cardId:"c6"},
+    {id:"seed8", desc:"Antoni Health (2/6)", value:126.66, date:"2026-06-30", ts:1782820800000, cardId:"itau"},
+    {id:"seed9", desc:"Cross Barra (estorno)", value:-98.5, date:"2026-07-05", ts:1783252800000, cardId:"itau"},
+    {id:"seed10", desc:"Drogasil 3447 (2/3)", value:46.61, date:"2026-07-14", ts:1784030400000, cardId:"itau"},
+    {id:"seed11", desc:"Petz Aracaju (2/2)", value:128.12, date:"2026-07-17", ts:1784289600000, cardId:"itau"},
+    {id:"seed12", desc:"PG Empresa Blindada L (2/3)", value:104.22, date:"2026-07-18", ts:1784376000000, cardId:"c6"},
+    {id:"seed13", desc:"Amazon Prime BR", value:19.9, date:"2026-07-24", ts:1784894400000, cardId:"caixa"},
+    {id:"seed14", desc:"MP*Assados do Chef", value:45.0, date:"2026-07-25", ts:1784980800000, cardId:"itau"},
+    {id:"seed15", desc:"Oxe Comércio Varejista", value:3.89, date:"2026-07-25", ts:1784980800000, cardId:"itau"},
+    {id:"seed16", desc:"Anthropic* Claude Sub", value:115.97, date:"2026-07-26", ts:1785067200000, cardId:"c6"},
+    {id:"seed17", desc:"Anthropic* Claude Sub", value:4.06, date:"2026-07-26", ts:1785067200000, cardId:"c6"},
+    {id:"seed18", desc:"Petrox Comercial Ltda", value:9.99, date:"2026-07-26", ts:1785067200000, cardId:"itau"},
+    {id:"seed19", desc:"Mensalidade Plano Anuidade Diferenciada", value:62.0, date:"2026-07-26", ts:1785067200000, cardId:"itau"},
+    {id:"seed20", desc:"Supermercado Hiper Caba", value:43.97, date:"2026-07-27", ts:1785153600000, cardId:"itau"},
+    {id:"seed21", desc:"Supermercado Hiper Caba", value:1.65, date:"2026-07-28", ts:1785240000000, cardId:"itau"},
+    {id:"seed22", desc:"MP Melb/Mais", value:9.8, date:"2026-07-28", ts:1785240000000, cardId:"caixa"},
+    {id:"seed23", desc:"Filial Maranhão", value:2000.0, date:"2026-07-31", ts:1785499200000, cardId:"itau"},
+    {id:"seed24", desc:"IFD*Carlos H (restaurante)", value:87.67, date:"2026-08-01", ts:1785585600000, cardId:"itau"},
+    {id:"seed25", desc:"Redução Mensalidade", value:-31.0, date:"2026-08-01", ts:1785585600000, cardId:"itau"},
+    {id:"seed26", desc:"Presentes Araca (1/3)", value:63.33, date:"2026-08-01", ts:1785585600000, cardId:"itau"},
+    {id:"seed27", desc:"DM *Helphbomaxcom", value:44.9, date:"2026-08-02", ts:1785672000000, cardId:"c6"},
+    {id:"seed28", desc:"Petrox Comercial Ltda", value:196.36, date:"2026-08-02", ts:1785672000000, cardId:"itau"},
+    {id:"seed29", desc:"Drogasil 3447", value:56.7, date:"2026-08-02", ts:1785672000000, cardId:"itau"},
+    {id:"seed30", desc:"MP*Minimercado", value:22.0, date:"2026-08-02", ts:1785672000000, cardId:"itau"},
+    {id:"seed31", desc:"IFD*Thais Ro (restaurante)", value:121.07, date:"2026-08-02", ts:1785672000000, cardId:"itau"},
+    {id:"seed32", desc:"Anthropic SA", value:0.75, date:"2026-08-04", ts:1785844800000, cardId:"c6"},
+    {id:"seed33", desc:"Anthropic SA", value:21.29, date:"2026-08-04", ts:1785844800000, cardId:"c6"},
+    {id:"seed34", desc:"Terra Mar Pescados", value:105.95, date:"2026-08-05", ts:1785931200000, cardId:"itau"},
+    {id:"seed35", desc:"Apple.com/Bill", value:29.9, date:"2026-08-08", ts:1786190400000, cardId:"c6"},
+    {id:"seed36", desc:"Atalaia Rações", value:174.15, date:"2026-08-08", ts:1786190400000, cardId:"itau"},
+    {id:"seed37", desc:"Supermercado Hiper Caba", value:53.88, date:"2026-08-08", ts:1786190400000, cardId:"itau"},
+    {id:"seed38", desc:"Eita Sushi", value:75.0, date:"2026-08-09", ts:1786276800000, cardId:"itau"},
+    {id:"seed39", desc:"MP Lovite/Oncolog", value:254.61, date:"2026-08-10", ts:1786363200000, cardId:"caixa"},
+    {id:"seed40", desc:"Bom Trigo", value:13.77, date:"2026-08-11", ts:1786449600000, cardId:"caixa"},
+    {id:"seed41", desc:"Supermercado Hiper Caba", value:59.52, date:"2026-08-12", ts:1786536000000, cardId:"itau"},
+    {id:"seed42", desc:"Terra Mar Pescados", value:91.23, date:"2026-08-12", ts:1786536000000, cardId:"caixa"},
+    {id:"seed43", desc:"Uber", value:25.68, date:"2026-08-13", ts:1786622400000, cardId:"itau"},
+    {id:"seed44", desc:"Petrox Comercial Ltda", value:316.14, date:"2026-08-14", ts:1786708800000, cardId:"itau"},
+    {id:"seed45", desc:"Oxe Comércio Varejista", value:19.27, date:"2026-08-15", ts:1786795200000, cardId:"itau"},
+    {id:"seed46", desc:"Redução Mensalidade", value:-31.0, date:"2026-08-15", ts:1786795200000, cardId:"itau"},
+    {id:"seed47", desc:"Valor inicial informado", value:51.26, date:"2026-08-17", ts:1786968000000, cardId:"bradesco"},
+    {id:"seed48", desc:"EC Mercadolivre (3/4)", value:29.25, date:"2026-08-17", ts:1786968000000, cardId:"caixa"},
+    {id:"seed49", desc:"Anthropic SA", value:10.62, date:"2026-08-18", ts:1787054400000, cardId:"c6"},
+    {id:"seed50", desc:"Anthropic SA", value:0.37, date:"2026-08-18", ts:1787054400000, cardId:"c6"},
+    {id:"seed51", desc:"Anthropic SA", value:21.02, date:"2026-08-18", ts:1787054400000, cardId:"c6"},
+    {id:"seed52", desc:"Anthropic SA", value:0.74, date:"2026-08-18", ts:1787054400000, cardId:"c6"},
+    {id:"seed53", desc:"Migliore Doceria", value:64.0, date:"2026-08-18", ts:1787054400000, cardId:"itau"},
+    {id:"seed54", desc:"Oxe Comércio Varejista", value:34.9, date:"2026-08-20", ts:1787227200000, cardId:"itau"},
+    {id:"seed55", desc:"Restaurante Vs", value:111.98, date:"2026-08-21", ts:1787313600000, cardId:"itau"},
+    {id:"seed56", desc:"Petland", value:160.0, date:"2026-08-21", ts:1787313600000, cardId:"itau"},
+    {id:"seed57", desc:"Oxe Comércio Varejista", value:24.06, date:"2026-08-22", ts:1787400000000, cardId:"itau"},
+    {id:"seed58", desc:"Petrox Comercial Ltda", value:440.41, date:"2026-08-23", ts:1787486400000, cardId:"itau"},
+    {id:"seed59", desc:"MP*Minimercado", value:24.0, date:"2026-08-23", ts:1787486400000, cardId:"itau"},
+    {id:"seed60", desc:"MP*Minimercado", value:10.0, date:"2026-08-23", ts:1787486400000, cardId:"itau"},
+    {id:"seed61", desc:"Eita Sushi", value:120.0, date:"2026-08-23", ts:1787486400000, cardId:"itau"},
+    {id:"seed62", desc:"Juros, multa e mora (rotativo em atraso)", value:13.29, date:"2026-08-24", ts:1787572800000, cardId:"caixa"},
+    {id:"seed63", desc:"Juros/IOF financiamento (encargos)", value:8.54, date:"2026-08-25", ts:1787659200000, cardId:"itau"}
+      ] },
+
+    { id:"carreira", icon:"🚀", name:"Carreira",
+      goal:"Avançar no caminho CPHR BC (WES → Captus → CIPD) rumo a Vancouver e me organizar melhor no trabalho atual",
+      nextSteps:"Pesquisar/avançar uma fonte de renda extra home office (negócio ou nova carreira)",
+      habits:[
+        {id:"h1", text:"Avançar uma etapa do plano de carreira"},
+        {id:"h2", text:"Organizar tarefas do dia"}
+      ]},
+
+    { id:"mente", icon:"🧠", name:"Mente",
+      goal:"Ter mais paz e tranquilidade — reduzir a mente acelerada e a autocobrança",
+      nextSteps:"Retomar a frequência no centro espírita",
+      habits:[
+        {id:"h1", text:"Momento de silêncio/oração"},
+        {id:"h2", text:"Pausa consciente durante o dia"},
+        {id:"h3", text:"Dialogar com calma no relacionamento"}
+      ]},
+
+    { id:"leitura", icon:"📚", name:"Leitura e Estudos",
+      goal:"Ler 10 livros até 31/12 (desafio de 1 por mês; atualmente na metade do 2º)",
+      nextSteps:"Terminar o livro atual e manter o ritmo mensal",
+      habits:[
+        {id:"h1", text:"Estudo de inglês (Pomodoro)"},
+        {id:"h2", text:"Ler 15-30 min"}
+      ]},
+
+    { id:"sono", icon:"🌙", name:"Sono e Descanso",
+      goal:"Garantir as horas de sono obrigatórias, mesmo treinando às 4:40",
+      nextSteps:"",
+      habits:[
+        {id:"h1", text:"Dormir a tempo de descansar antes das 4:40"},
+        {id:"h2", text:"Sem telas antes de dormir"}
+      ]}
+  ];
+
+  function todayStr(){
+    const d = new Date();
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  }
+  function loadData(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){ const parsed = JSON.parse(raw); if(parsed && parsed.pillars) return parsed; }
+    }catch(e){ console.warn("Falha ao ler dados salvos", e); }
+    return { pillars: JSON.parse(JSON.stringify(DEFAULT_PILLARS)), history:{}, emotions:{} };
+  }
+  function saveData(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+    catch(e){ console.warn("Falha ao salvar dados", e); }
+    fbDebouncedSave();
+  }
+  let fbSaveTimer = null;
+  function fbDebouncedSave(){
+    if(!(window.__fb && window.__fb.ready && window.__fb.auth && window.__fb.auth.currentUser)) return;
+    clearTimeout(fbSaveTimer);
+    fbSaveTimer = setTimeout(()=>{ window.__fb.save(data); }, 700);
+  }
+  let data = loadData();
+  if(!data.emotions) data.emotions = {};
+  if(!data.pillars.find(p=>p.id==="metas21")){
+    data.pillars.unshift(JSON.parse(JSON.stringify(METAS21_PILLAR)));
+    saveData();
+  }
+  {
+    const fin = data.pillars.find(p=>p.id==="financas");
+    if(fin){
+      let changed=false;
+      if(!fin.expenses){ fin.expenses = []; changed=true; }
+      if(!fin.cards){ fin.cards = []; changed=true; }
+      if(fin.hasExpenses===undefined){ fin.hasExpenses = true; changed=true; }
+      if(fin.cards.length===0 && fin.expenses.length===0){
+        const seedFin = DEFAULT_PILLARS.find(p=>p.id==="financas");
+        fin.cards = JSON.parse(JSON.stringify(seedFin.cards));
+        fin.expenses = JSON.parse(JSON.stringify(seedFin.expenses));
+        changed=true;
+      }
+      if(changed) saveData();
+    }
+  }
+  let currentTab = "overview";
+  let subTab = { overview:"check", emotions:"agora" };
+  function getSubTab(id, def){ if(!subTab[id]) subTab[id]=def; return subTab[id]; }
+  function setSubTab(id, val){ subTab[id]=val; render(); }
+
+  function dateAdd(dateStr, days){
+    const d = new Date(dateStr+"T00:00:00"); d.setDate(d.getDate()+days);
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  }
+  function daysBetween(a,b){
+    const da = new Date(a+"T00:00:00"), db = new Date(b+"T00:00:00");
+    return Math.round((db-da)/86400000);
+  }
+  function clampToday(){
+    const t = todayStr();
+    return t < START_DATE ? START_DATE : (t > END_DATE ? END_DATE : t);
+  }
+  function pillarDayRatio(pillar, dateStr){
+    const rec = data.history[dateStr];
+    if(!rec || !rec[pillar.id] || pillar.habits.length===0) return null;
+    const states = rec[pillar.id];
+    let done=0, total=pillar.habits.length;
+    pillar.habits.forEach(h=>{ if(states[h.id]) done++; });
+    return total>0 ? done/total : null;
+  }
+  function pillarRateWindow(pillar, windowDays){
+    const today = clampToday();
+    const elapsed = Math.min(windowDays, daysBetween(START_DATE, today)+1);
+    if(elapsed<=0) return 0;
+    let sum=0, count=0;
+    for(let i=0;i<elapsed;i++){
+      const d = dateAdd(today, -i);
+      const r = pillarDayRatio(pillar, d);
+      sum += (r===null?0:r); count++;
+    }
+    return count>0 ? Math.round((sum/count)*100) : 0;
+  }
+  function dayTotals(dateStr){
+    let done=0, total=0;
+    data.pillars.forEach(p=>{
+      total += p.habits.length;
+      const rec = data.history[dateStr] && data.history[dateStr][p.id];
+      if(rec) p.habits.forEach(h=>{ if(rec[h.id]) done++; });
+    });
+    return {done, total};
+  }
+  function computeStreak(){
+    const today = clampToday();
+    let streak = 0;
+    for(let i=0;i<400;i++){
+      const d = dateAdd(today, -i);
+      if(d < START_DATE) break;
+      const t = dayTotals(d);
+      if(t.done>0){ streak++; } else { break; }
+    }
+    return streak;
+  }
+  function toggleHabit(pillarId, habitId){
+    const today = clampToday();
+    if(!data.history[today]) data.history[today] = {};
+    if(!data.history[today][pillarId]) data.history[today][pillarId] = {};
+    data.history[today][pillarId][habitId] = !data.history[today][pillarId][habitId];
+    saveData(); render();
+  }
+  function addHabit(pillarId, text){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar || !text.trim()) return;
+    pillar.habits.push({id:"h"+Date.now(), text:text.trim()});
+    saveData(); render();
+  }
+  function removeHabit(pillarId, habitId){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar) return;
+    pillar.habits = pillar.habits.filter(h=>h.id!==habitId);
+    saveData(); render();
+  }
+  function updateField(pillarId, field, value){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar) return;
+    pillar[field] = value; saveData();
+  }
+  function addMetricEntry(pillarId, value){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar || value===""||isNaN(parseFloat(value))) return;
+    pillar.metricEntries.push({date: clampToday(), value: parseFloat(value)});
+    saveData(); render();
+  }
+  function addSavingsEntry(pillarId, value){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar || value===""||isNaN(parseFloat(value))) return;
+    pillar.savingsEntries.push({date: clampToday(), value: parseFloat(value)});
+    saveData(); render();
+  }
+  function setSavingsGoal(pillarId, value){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar) return;
+    pillar.savingsGoal = parseFloat(value)||0; saveData();
+  }
+  function addExpense(pillarId, desc, value, cardId){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar || !desc.trim() || value===""||isNaN(parseFloat(value))) return;
+    pillar.expenses.push({id:"e"+Date.now(), desc:desc.trim(), value:parseFloat(value), date: clampToday(), ts: Date.now(), cardId: cardId||null});
+    saveData(); render();
+  }
+  function removeExpense(pillarId, expenseId){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar) return;
+    pillar.expenses = pillar.expenses.filter(e=>e.id!==expenseId);
+    saveData(); render();
+  }
+  function addCard(pillarId, name, closingDay, dueDay){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar || !name.trim()) return;
+    pillar.cards.push({
+      id:"c"+Date.now(), name:name.trim(),
+      closingDay: closingDay? parseInt(closingDay,10)||null : null,
+      dueDay: dueDay? parseInt(dueDay,10)||null : null,
+      paidUntilTs:null
+    });
+    saveData(); render();
+  }
+  function removeCard(pillarId, cardId){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar) return;
+    pillar.cards = pillar.cards.filter(c=>c.id!==cardId);
+    pillar.expenses.forEach(e=>{ if(e.cardId===cardId) e.cardId=null; });
+    saveData(); render();
+  }
+  function markCardPaid(pillarId, cardId){
+    const pillar = data.pillars.find(p=>p.id===pillarId);
+    if(!pillar) return;
+    const card = pillar.cards.find(c=>c.id===cardId);
+    if(!card) return;
+    card.paidUntilTs = Date.now();
+    saveData(); render();
+  }
+  function cardFatura(pillar, card){
+    return pillar.expenses
+      .filter(e=> e.cardId===card.id && (!card.paidUntilTs || (e.ts||0) > card.paidUntilTs))
+      .reduce((s,e)=> s+e.value, 0);
+  }
+  function monthExpenseTotal(pillar){
+    const prefix = clampToday().slice(0,7);
+    return pillar.expenses.filter(e=> e.date.slice(0,7)===prefix).reduce((s,e)=> s+e.value, 0);
+  }
+  function emptyEmotion(){ return {mood:null, energy:null, calm:null, tags:[], context:"Geral", note:""}; }
+  function setEmotion(field, value){
+    const today = clampToday();
+    if(!data.emotions[today]) data.emotions[today] = emptyEmotion();
+    if(!data.emotions[today].tags) data.emotions[today].tags = [];
+    data.emotions[today][field] = value;
+    saveData();
+  }
+  function toggleEmotionTag(tag){
+    const today = clampToday();
+    if(!data.emotions[today]) data.emotions[today] = emptyEmotion();
+    if(!data.emotions[today].tags) data.emotions[today].tags = [];
+    const tags = data.emotions[today].tags;
+    const idx = tags.indexOf(tag);
+    if(idx>=0) tags.splice(idx,1); else tags.push(tag);
+    saveData(); render();
+  }
+
+  function el(tag, attrs, children){
+    const e = document.createElement(tag);
+    if(attrs) for(const k in attrs){
+      if(k==="class") e.className=attrs[k];
+      else if(k==="html") e.innerHTML=attrs[k];
+      else if(k==="style") e.setAttribute("style", attrs[k]);
+      else e.setAttribute(k, attrs[k]);
+    }
+    (children||[]).forEach(c=> e.appendChild(c));
+    return e;
+  }
+  function pillarHex(pillarId, kind){
+    try{
+      const v = getComputedStyle(document.documentElement).getPropertyValue("--p-"+pillarId+"-"+kind);
+      return v ? v.trim() : "#8560c9";
+    }catch(e){ return "#8560c9"; }
+  }
+  function allTabs(){
+    return [{id:"overview", icon:"🧭", name:"Visão Geral"}]
+      .concat(data.pillars.map(p=>({id:p.id, icon:p.icon, name:p.name})))
+      .concat([{id:"emotions", icon:"🗺️", name:"Emoções"}]);
+  }
+  function segmented(container, tabs, activeId, ac, onSelect){
+    const row = el("div",{class:"subtabs"});
+    tabs.forEach(t=>{
+      const btn = el("button",{type:"button", class:"subtab-btn"+(activeId===t.id?" active":""), html:t.label});
+      if(activeId===t.id) btn.style.background = ac;
+      btn.addEventListener("click", ()=> onSelect(t.id));
+      row.appendChild(btn);
+    });
+    container.appendChild(row);
+  }
+
+  let overallChartInstance=null, metricChartInstance=null, emotionChartInstance=null;
+
+  function renderHero(){
+    document.getElementById("dateRangeLabel").textContent =
+      "17 de setembro a 31 de dezembro de 2026 — acompanhamento diário dos seus pilares e das suas metas de 21 dias";
+
+    const today = clampToday();
+    const totalDays = daysBetween(START_DATE, END_DATE);
+    const elapsed = Math.max(0, daysBetween(START_DATE, today));
+    const remaining = Math.max(0, daysBetween(today, END_DATE));
+    const t = dayTotals(today);
+    const pctToday = t.total>0 ? Math.round((t.done/t.total)*100) : 0;
+    const streak = computeStreak();
+
+    const row = document.getElementById("statsRow");
+    row.innerHTML = "";
+    [
+      {num:remaining, lbl:"dias até 31 dez"},
+      {num:elapsed+"/"+totalDays, lbl:"dias percorridos"},
+      {num:(streak>0? "🔥 "+streak : "0"), lbl: streak===1 ? "dia seguido" : "dias seguidos"}
+    ].forEach(s=> row.appendChild(el("div",{class:"hero-stat"},[ el("div",{class:"num", html:s.num}), el("div",{class:"lbl", html:s.lbl}) ])));
+
+    const ringFill = document.getElementById("ringFill");
+    ringFill.setAttribute("stroke-dasharray", RING_CIRC.toFixed(1));
+    ringFill.setAttribute("stroke-dashoffset", (RING_CIRC * (1 - pctToday/100)).toFixed(1));
+    document.getElementById("ringPct").textContent = pctToday+"%";
+  }
+
+  function renderSectionPill(){
+    const t = allTabs().find(x=>x.id===currentTab);
+    const col = PILLAR_COLORS[currentTab] || PILLAR_COLORS.overview;
+    const pill = document.getElementById("sectionPill");
+    pill.innerHTML = "";
+    pill.style.background = col.bg; pill.style.color = col.ac;
+    pill.appendChild(el("span",{html:t.icon}));
+    pill.appendChild(el("span",{html:t.name}));
+  }
+
+  function renderDrawer(){
+    const list = document.getElementById("drawerList");
+    list.innerHTML = "";
+    allTabs().forEach(t=>{
+      const col = PILLAR_COLORS[t.id] || PILLAR_COLORS.overview;
+      const item = el("div",{class:"drawer-item"},[
+        el("span",{class:"dico", html:t.icon}), el("span",{html:t.name})
+      ]);
+      item.style.background = col.bg; item.style.color = col.ac;
+      item.style.borderColor = currentTab===t.id ? col.ac : "var(--border)";
+      item.addEventListener("click", ()=>{ currentTab = t.id; closeDrawer(); render(); });
+      list.appendChild(item);
+    });
+  }
+  function openDrawer(){ document.getElementById("drawer").classList.add("open"); document.getElementById("drawerOverlay").classList.add("open"); }
+  function closeDrawer(){ document.getElementById("drawer").classList.remove("open"); document.getElementById("drawerOverlay").classList.remove("open"); }
+
+  function renderHeatmap(pillar){
+    const wrap = el("div",{class:"heatmap"});
+    const today = clampToday();
+    for(let i=13;i>=0;i--){
+      const d = dateAdd(today, -i);
+      const r = pillarDayRatio(pillar, d);
+      let lvl = 0;
+      if(r!==null){ if(r>=0.99) lvl=4; else if(r>=0.66) lvl=3; else if(r>=0.33) lvl=2; else if(r>0) lvl=1; }
+      wrap.appendChild(el("div",{class:"heat-cell","data-lvl":lvl,"title":d}));
+    }
+    return wrap;
+  }
+
+  function renderMetricWidget(pillar){
+    const wrap = el("div",{});
+    wrap.appendChild(el("label",{class:"field-label", html:"Registro de "+pillar.metricLabel+" ("+pillar.metricUnit+")"}));
+    const row = el("div",{class:"metric-row"});
+    const input = el("input",{type:"number", step:"0.1", placeholder:"Novo valor", style:"margin-bottom:0;"});
+    const btn = el("button",{html:"Registrar"});
+    btn.addEventListener("click", ()=>{ addMetricEntry(pillar.id, input.value); input.value=""; });
+    row.appendChild(input); row.appendChild(btn);
+    wrap.appendChild(row);
+
+    const entries = pillar.metricEntries||[];
+    if(entries.length>0){
+      const last = entries[entries.length-1];
+      const first = entries[0];
+      const delta = (last.value - first.value);
+      wrap.appendChild(el("div",{class:"metric-summary"},[
+        el("div",{class:"big", html: last.value+" "+pillar.metricUnit}),
+        el("div",{class:"delta", html: (delta>=0?"+":"")+delta.toFixed(1)+" desde o início"})
+      ]));
+      const canvasWrap = el("div",{class:"chart-holder small"});
+      const canvas = el("canvas",{});
+      canvasWrap.appendChild(canvas);
+      wrap.appendChild(canvasWrap);
+      setTimeout(()=>{
+        if(metricChartInstance) metricChartInstance.destroy();
+        metricChartInstance = new Chart(canvas, {
+          type:"line",
+          data:{ labels: entries.map(e=>e.date.slice(5)), datasets:[{ data: entries.map(e=>e.value), borderColor: pillarHex(pillar.id,"ac"), backgroundColor:"transparent", tension:.3, pointRadius:3 }] },
+          options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} }
+        });
+      },0);
+    }
+    return wrap;
+  }
+
+  function renderSavingsWidget(pillar){
+    const wrap = el("div",{});
+    wrap.appendChild(el("label",{class:"field-label", html:"Meta de economia (R$)"}));
+    const goalInput = el("input",{type:"number", step:"1", placeholder:"Valor da meta"});
+    goalInput.value = pillar.savingsGoal||"";
+    goalInput.addEventListener("input", ()=> setSavingsGoal(pillar.id, goalInput.value));
+    wrap.appendChild(goalInput);
+
+    const entries = pillar.savingsEntries||[];
+    const total = entries.reduce((s,e)=> s+e.value, 0);
+    const goal = pillar.savingsGoal||0;
+    const pct = goal>0 ? Math.min(100, Math.round((total/goal)*100)) : 0;
+    wrap.appendChild(el("div",{class:"progress-bar"},[ el("div",{class:"fill", style:"width:"+pct+"%"}) ]));
+    wrap.appendChild(el("div",{class:"progress-label", html:"R$ "+total.toFixed(2)+" guardado"+(goal>0?" de R$ "+goal.toFixed(2)+" ("+pct+"%)":"") }));
+
+    const row = el("div",{class:"metric-row"});
+    const input = el("input",{type:"number", step:"1", placeholder:"Valor guardado agora", style:"margin-bottom:0;"});
+    const btn = el("button",{html:"+ Adicionar"});
+    btn.addEventListener("click", ()=>{ addSavingsEntry(pillar.id, input.value); input.value=""; });
+    row.appendChild(input); row.appendChild(btn);
+    wrap.appendChild(row);
+    return wrap;
+  }
+
+  function renderTodayAcrossPillars(){
+    const today = clampToday();
+    const wrap = el("div",{class:"today-check"});
+    data.pillars.forEach(pillar=>{
+      const col = PILLAR_COLORS[pillar.id];
+      const row = el("div",{class:"today-check-row", style:"--pillar-bg:"+col.bg+"; --pillar-ac:"+col.ac+";"});
+      row.appendChild(el("div",{class:"pillar-tag"},[ el("span",{html:pillar.icon}), el("span",{html:pillar.name}) ]));
+      const boxes = el("div",{class:"today-check-boxes"});
+      const todayRec = (data.history[today] && data.history[today][pillar.id]) || {};
+      let done=0;
+      pillar.habits.forEach(h=>{
+        const isDone = !!todayRec[h.id];
+        if(isDone) done++;
+        const lbl = el("label",{class:"mini-habit"+(isDone?" done":"")});
+        const cb = el("input",{type:"checkbox"});
+        cb.checked = isDone;
+        cb.addEventListener("change", ()=> toggleHabit(pillar.id, h.id));
+        lbl.appendChild(cb);
+        lbl.appendChild(el("span",{html:h.text}));
+        boxes.appendChild(lbl);
+      });
+      row.appendChild(boxes);
+      row.appendChild(el("span",{class:"pct-tag", html: done+"/"+pillar.habits.length}));
+      wrap.appendChild(row);
+    });
+    return wrap;
+  }
+
+  function renderOverviewPanel(){
+    const content = document.getElementById("tabContent");
+    const panel = el("div",{class:"panel"});
+    panel.appendChild(el("h2",{html:"🧭 Visão Geral"}));
+
+    const sub = getSubTab("overview","check");
+    segmented(panel, [{id:"check",label:"✅ Check do dia"},{id:"chart",label:"📊 Gráfico"}], sub, "var(--accent)", (id)=> setSubTab("overview", id));
+
+    if(sub==="check"){
+      panel.appendChild(el("div",{class:"sub", html:"Marque tudo o que já fez hoje, em qualquer pilar, sem trocar de aba."}));
+      panel.appendChild(renderTodayAcrossPillars());
+    }else{
+      panel.appendChild(el("div",{class:"sub", html:"Taxa de conclusão de hábitos por pilar nos últimos 30 dias (ou desde 17/09)."}));
+      const canvasWrap = el("div",{class:"chart-holder"});
+      const canvas = el("canvas",{});
+      canvasWrap.appendChild(canvas);
+      panel.appendChild(canvasWrap);
+      const labels = data.pillars.map(p=> p.icon+" "+p.name);
+      const values = data.pillars.map(p=> pillarRateWindow(p,30));
+      const colors = data.pillars.map(p=> pillarHex(p.id,"ac"));
+      setTimeout(()=>{
+        if(overallChartInstance) overallChartInstance.destroy();
+        overallChartInstance = new Chart(canvas, {
+          type:"bar",
+          data:{ labels: labels, datasets:[{ label:"% concluído", data: values, backgroundColor: colors, borderRadius:10, maxBarThickness:44 }] },
+          options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ beginAtZero:true, max:100, ticks:{ callback:v=>v+"%" } } } }
+        });
+      },0);
+    }
+    content.appendChild(panel);
+  }
+
+  function renderPillarPanel(pillar){
+    const today = clampToday();
+    const rateWeek = pillarRateWindow(pillar,7);
+    const col = PILLAR_COLORS[pillar.id];
+    const panel = el("div",{class:"panel", style:"--pillar-bg:"+col.bg+"; --pillar-ac:"+col.ac+";"});
+
+    panel.appendChild(el("div",{class:"pillar-badgehead"},[
+      el("div",{style:"display:flex;align-items:center;gap:12px;"},[
+        el("div",{class:"big-icon", html:pillar.icon}),
+        el("div",{class:"title", html:pillar.name})
+      ]),
+      el("div",{class:"badge", html: rateWeek+"% na última semana"})
+    ]));
+
+    const sub = getSubTab(pillar.id, "hoje");
+    const subTabs = pillar.hasExpenses
+      ? [{id:"hoje",label:"✅ Hoje"},{id:"gastos",label:"🧾 Gastos"},{id:"faturas",label:"💳 Faturas"},{id:"meta",label:"🎯 Meta"}]
+      : [{id:"hoje",label:"✅ Hoje"},{id:"meta",label:"🎯 Meta"},{id:"historico",label:"📈 Histórico"}];
+    segmented(panel, subTabs, sub, col.ac, (id)=> setSubTab(pillar.id, id));
+
+    if(sub==="hoje"){
+      panel.appendChild(el("label",{class:"field-label", html:"Hábitos de hoje"}));
+      const habitsWrap = el("div",{class:"habits"});
+      const todayRec = (data.history[today] && data.history[today][pillar.id]) || {};
+      pillar.habits.forEach(h=>{
+        const cb = el("input",{type:"checkbox"});
+        cb.checked = !!todayRec[h.id];
+        cb.addEventListener("change", ()=> toggleHabit(pillar.id, h.id));
+        const rm = el("span",{class:"rm", html:"×"});
+        rm.addEventListener("click", ()=> removeHabit(pillar.id, h.id));
+        habitsWrap.appendChild(el("div",{class:"habit-row"},[cb, el("span",{html:h.text}), rm]));
+      });
+      panel.appendChild(habitsWrap);
+
+      const addWrap = el("div",{class:"add-habit"});
+      const addInput = el("input",{type:"text", placeholder:"Novo hábito...", style:"margin-bottom:0;"});
+      const addBtn = el("button",{html:"+"});
+      addBtn.addEventListener("click", ()=>{ addHabit(pillar.id, addInput.value); addInput.value=""; });
+      addInput.addEventListener("keydown",(e)=>{ if(e.key==="Enter"){ addHabit(pillar.id, addInput.value); addInput.value=""; }});
+      addWrap.appendChild(addInput); addWrap.appendChild(addBtn);
+      panel.appendChild(addWrap);
+
+    } else if(sub==="gastos"){
+      const total = monthExpenseTotal(pillar);
+      panel.appendChild(el("div",{class:"expense-summary"},[
+        el("div",{class:"big", html:"R$ "+total.toFixed(2)}),
+        el("div",{class:"lbl", html:"gasto este mês"})
+      ]));
+
+      const addRow = el("div",{class:"expense-add-row"});
+      const descInput = el("input",{type:"text", placeholder:"Descrição (ex: mercado)"});
+      const valInput = el("input",{type:"number", step:"0.01", placeholder:"Valor"});
+      const formaSelect = el("select",{});
+      formaSelect.appendChild(el("option",{value:"", html:"Dinheiro/Pix/Débito"}));
+      pillar.cards.forEach(c=> formaSelect.appendChild(el("option",{value:c.id, html:"💳 "+c.name})));
+      const addBtn = el("button",{html:"Registrar"});
+      addBtn.addEventListener("click", ()=>{
+        addExpense(pillar.id, descInput.value, valInput.value, formaSelect.value||null);
+        descInput.value=""; valInput.value="";
+      });
+      addRow.appendChild(descInput); addRow.appendChild(valInput); addRow.appendChild(formaSelect); addRow.appendChild(addBtn);
+      panel.appendChild(addRow);
+
+      const sorted = pillar.expenses.slice().sort((a,b)=> b.date.localeCompare(a.date) || 0).slice(0,10);
+      if(sorted.length===0){
+        panel.appendChild(el("div",{class:"empty-hint", html:"Nenhum gasto registrado ainda. Use o formulário acima pra começar a acompanhar."}));
+      } else {
+        const list = el("div",{class:"expense-list"});
+        sorted.forEach(e=>{
+          const card = pillar.cards.find(c=>c.id===e.cardId);
+          const formaTxt = card ? "💳 "+card.name : "Dinheiro/Pix/Débito";
+          const row = el("div",{class:"expense-row"});
+          const info = el("div",{class:"info"},[
+            el("div",{class:"desc", html:e.desc}),
+            el("div",{class:"meta", html: e.date.slice(5)+" · "+formaTxt})
+          ]);
+          const val = el("div",{class:"val", html:"R$ "+e.value.toFixed(2)});
+          const rm = el("span",{class:"rm", html:"×"});
+          rm.addEventListener("click", ()=> removeExpense(pillar.id, e.id));
+          row.appendChild(info); row.appendChild(val); row.appendChild(rm);
+          list.appendChild(row);
+        });
+        panel.appendChild(list);
+      }
+
+    } else if(sub==="faturas"){
+      if(pillar.cards.length===0){
+        panel.appendChild(el("div",{class:"empty-hint", html:"Nenhum cartão cadastrado ainda. Adicione um abaixo pra começar a acompanhar a fatura."}));
+      } else {
+        pillar.cards.forEach(card=>{
+          const fatura = cardFatura(pillar, card);
+          const row = el("div",{class:"card-row"});
+          const head = el("div",{class:"card-row-head"},[
+            el("span",{class:"cname", html:"💳 "+card.name}),
+            el("span",{class:"rm", html:"×"})
+          ]);
+          head.lastChild.addEventListener("click", ()=>{
+            if(confirm("Remover o cartão \""+card.name+"\"? Os gastos já lançados continuam na lista de Gastos.")) removeCard(pillar.id, card.id);
+          });
+          row.appendChild(head);
+          if(card.closingDay || card.dueDay){
+            row.appendChild(el("div",{class:"meta", style:"font-size:0.78rem;color:var(--muted);margin-top:4px;", html:
+              (card.closingDay? "fecha dia "+String(card.closingDay).padStart(2,"0") : "")+
+              (card.closingDay && card.dueDay? " · " : "")+
+              (card.dueDay? "vence dia "+String(card.dueDay).padStart(2,"0") : "")
+            }));
+          }
+          row.appendChild(el("div",{class:"card-fatura-val"},[
+            el("small",{html:"Fatura atual"}),
+            el("span",{html:"R$ "+fatura.toFixed(2)})
+          ]));
+          const actions = el("div",{class:"card-row-actions"});
+          const payBtn = el("button",{html:"Marcar fatura como paga"});
+          payBtn.addEventListener("click", ()=>{
+            if(confirm("Marcar a fatura do \""+card.name+"\" como paga? O contador zera e recomeça a partir de hoje.")) markCardPaid(pillar.id, card.id);
+          });
+          actions.appendChild(payBtn);
+          row.appendChild(actions);
+          panel.appendChild(row);
+        });
+      }
+      const addCardRow = el("div",{class:"add-card-row"});
+      const cardNameInput = el("input",{type:"text", placeholder:"Nome do cartão (ex: Nubank)"});
+      const closingInput = el("input",{type:"number", placeholder:"Fecha dia", min:"1", max:"31", style:"max-width:100px;"});
+      const dueInput = el("input",{type:"number", placeholder:"Vence dia", min:"1", max:"31", style:"max-width:100px;"});
+      const addCardBtn = el("button",{html:"+ Adicionar"});
+      addCardBtn.addEventListener("click", ()=>{
+        addCard(pillar.id, cardNameInput.value, closingInput.value, dueInput.value);
+        cardNameInput.value=""; closingInput.value=""; dueInput.value="";
+      });
+      addCardRow.appendChild(cardNameInput); addCardRow.appendChild(closingInput); addCardRow.appendChild(dueInput); addCardRow.appendChild(addCardBtn);
+      panel.appendChild(addCardRow);
+
+    } else if(sub==="meta"){
+      panel.appendChild(el("label",{class:"field-label", html:"Meta principal até 31/12"}));
+      const goalArea = el("textarea",{placeholder:"Qual é a meta deste pilar?"});
+      goalArea.value = pillar.goal || "";
+      goalArea.addEventListener("input", ()=> updateField(pillar.id,"goal",goalArea.value));
+      panel.appendChild(goalArea);
+
+      panel.appendChild(el("label",{class:"field-label", html:"Próximos passos"}));
+      const nsArea = el("textarea",{placeholder:"O que fazer a seguir?"});
+      nsArea.value = pillar.nextSteps || "";
+      nsArea.addEventListener("input", ()=> updateField(pillar.id,"nextSteps",nsArea.value));
+      panel.appendChild(nsArea);
+
+      if(pillar.hasMetric || pillar.hasSavings) panel.appendChild(el("div",{class:"divider"}));
+      if(pillar.hasMetric) panel.appendChild(renderMetricWidget(pillar));
+      if(pillar.hasSavings) panel.appendChild(renderSavingsWidget(pillar));
+
+      if(pillar.hasExpenses){
+        panel.appendChild(el("div",{class:"divider"}));
+        panel.appendChild(el("label",{class:"field-label", html:"Últimos 14 dias (hábitos financeiros)"}));
+        panel.appendChild(renderHeatmap(pillar));
+        panel.appendChild(el("div",{class:"heat-caption", html:"Mais escuro é mais hábitos concluídos naquele dia"}));
+      }
+
+    } else {
+      panel.appendChild(el("label",{class:"field-label", html:"Últimos 14 dias"}));
+      panel.appendChild(renderHeatmap(pillar));
+      panel.appendChild(el("div",{class:"heat-caption", html:"Mais escuro é mais hábitos concluídos naquele dia"}));
+      if(pillar.hasMetric || pillar.hasSavings) panel.appendChild(el("div",{class:"divider"}));
+      if(pillar.hasMetric) panel.appendChild(renderMetricWidget(pillar));
+      if(pillar.hasSavings) panel.appendChild(renderSavingsWidget(pillar));
+    }
+
+    document.getElementById("tabContent").appendChild(panel);
+  }
+
+  function renderGauge(gaugeDef, rec){
+    const val = rec[gaugeDef.id];
+    const pct = val ? (val/5)*100 : 0;
+    const lvl = gaugeDef.levels.find(l=>l.v===val);
+    const wrap = el("div",{class:"gauge", style:"--gc:"+gaugeDef.color+";"});
+    const arcWrap = el("div",{class:"gauge-arc-wrap"});
+    arcWrap.innerHTML = '<svg class="gauge-arc" viewBox="0 0 100 60">'+
+      '<path class="gauge-track" pathLength="100" d="M10,55 A40,40 0 0 1 90,55"></path>'+
+      '<path class="gauge-fill" pathLength="100" style="stroke-dasharray:100; stroke-dashoffset:'+(100-pct)+';" d="M10,55 A40,40 0 0 1 90,55"></path>'+
+      '</svg>';
+    wrap.appendChild(arcWrap);
+    wrap.appendChild(el("div",{class:"gauge-face"},[
+      el("span",{class:"gauge-emoji", html: lvl ? lvl.e : "·"}),
+      el("span",{class:"gauge-val", html: lvl ? lvl.t : "Ainda não marcado"})
+    ]));
+    wrap.appendChild(el("div",{class:"gauge-label", html: gaugeDef.label}));
+    const pips = el("div",{class:"gauge-pips"});
+    gaugeDef.levels.forEach(l=>{
+      const pip = el("button",{type:"button", class:"gauge-pip"+(val===l.v?" active":""), title:l.t, "aria-label":gaugeDef.label+": "+l.t});
+      pip.addEventListener("click", ()=>{ setEmotion(gaugeDef.id, l.v); render(); });
+      pips.appendChild(pip);
+    });
+    wrap.appendChild(pips);
+    return wrap;
+  }
+
+  function renderEmotionsPanel(){
+    const today = clampToday();
+    const rec = Object.assign(emptyEmotion(), data.emotions[today]||{});
+    if(!rec.tags) rec.tags = [];
+    const col = PILLAR_COLORS.emotions;
+    const panel = el("div",{class:"panel", style:"--pillar-bg:"+col.bg+"; --pillar-ac:"+col.ac+";"});
+    panel.appendChild(el("h2",{html:"🗺️ Diário de Emoções"}));
+
+    const sub = getSubTab("emotions","agora");
+    segmented(panel, [{id:"agora",label:"🎭 Agora"},{id:"historico",label:"📈 Histórico"}], sub, col.ac, (id)=> setSubTab("emotions", id));
+
+    if(sub==="agora"){
+      panel.appendChild(el("div",{class:"sub", html:"Três medidores rápidos pra retratar como você está, mais o que exatamente você está sentindo."}));
+      const gaugesRow = el("div",{class:"gauges-row"});
+      GAUGES.forEach(g=> gaugesRow.appendChild(renderGauge(g, rec)));
+      panel.appendChild(gaugesRow);
+
+      panel.appendChild(el("div",{class:"tag-section-title", html:"🌤️ Sentindo também (estados leves)"}));
+      const lightGroup = el("div",{class:"tag-group"});
+      TAGS_LIGHT.forEach(t=>{
+        const chip = el("button",{type:"button", class:"tag-chip light"+(rec.tags.includes(t)?" active":""), html:t});
+        chip.addEventListener("click", ()=> toggleEmotionTag(t));
+        lightGroup.appendChild(chip);
+      });
+      panel.appendChild(lightGroup);
+
+      panel.appendChild(el("div",{class:"tag-section-title", html:"🌧️ Sentindo também (estados difíceis)"}));
+      const hardGroup = el("div",{class:"tag-group"});
+      TAGS_HARD.forEach(t=>{
+        const chip = el("button",{type:"button", class:"tag-chip hard"+(rec.tags.includes(t)?" active":""), html:t});
+        chip.addEventListener("click", ()=> toggleEmotionTag(t));
+        hardGroup.appendChild(chip);
+      });
+      panel.appendChild(hardGroup);
+
+      panel.appendChild(el("label",{class:"field-label", html:"Contexto"}));
+      const select = el("select",{});
+      CONTEXTS.forEach(c=>{
+        const opt = el("option",{value:c, html:c});
+        if(rec.context===c) opt.setAttribute("selected","selected");
+        select.appendChild(opt);
+      });
+      select.addEventListener("change", ()=> setEmotion("context", select.value));
+      panel.appendChild(select);
+
+      panel.appendChild(el("label",{class:"field-label", html:"O que influenciou como você se sentiu?"}));
+      const note = el("textarea",{placeholder:"Ex: rotina puxada, conversa com a Juliana, falta de sono..."});
+      note.value = rec.note||"";
+      note.addEventListener("input", ()=> setEmotion("note", note.value));
+      panel.appendChild(note);
+
+    } else {
+      const dates = Object.keys(data.emotions).sort();
+      if(dates.length===0){
+        panel.appendChild(el("div",{class:"sub", html:"Ainda não há registros suficientes. Volte aqui depois de marcar seus medidores por alguns dias."}));
+      } else {
+        panel.appendChild(el("label",{class:"field-label", html:"Evolução — humor, energia e calma"}));
+        const canvasWrap = el("div",{class:"chart-holder small"});
+        const canvas = el("canvas",{});
+        canvasWrap.appendChild(canvas);
+        panel.appendChild(canvasWrap);
+        setTimeout(()=>{
+          if(emotionChartInstance) emotionChartInstance.destroy();
+          emotionChartInstance = new Chart(canvas, {
+            type:"line",
+            data:{ labels: dates.map(d=>d.slice(5)), datasets:[
+              { label:"Humor", data: dates.map(d=>data.emotions[d].mood), borderColor: pillarHex("emotions","ac"), backgroundColor:"transparent", tension:.3, spanGaps:true, pointRadius:3 },
+              { label:"Energia", data: dates.map(d=> (data.emotions[d].energy!==undefined? data.emotions[d].energy : null)), borderColor: getComputedStyle(document.documentElement).getPropertyValue("--gauge-energia").trim()||"#c99a2e", backgroundColor:"transparent", tension:.3, spanGaps:true, pointRadius:3 },
+              { label:"Calma", data: dates.map(d=> (data.emotions[d].calm!==undefined? data.emotions[d].calm : null)), borderColor: getComputedStyle(document.documentElement).getPropertyValue("--gauge-calma").trim()||"#3f9e63", backgroundColor:"transparent", tension:.3, spanGaps:true, pointRadius:3 }
+            ]},
+            options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true, position:"top", labels:{boxWidth:10, font:{size:11}}}}, scales:{ y:{min:1,max:5,ticks:{stepSize:1}} } }
+          });
+        },0);
+
+        panel.appendChild(el("div",{class:"divider"}));
+        panel.appendChild(el("label",{class:"field-label", html:"Últimos registros"}));
+        const list = el("div",{class:"emotion-list"});
+        dates.slice(-6).reverse().forEach(d=>{
+          const e = data.emotions[d];
+          const moodLvl = GAUGES[0].levels.find(l=>l.v===e.mood);
+          const enLvl = GAUGES[1].levels.find(l=>l.v===e.energy);
+          const calLvl = GAUGES[2].levels.find(l=>l.v===e.calm);
+          const facesLine = (moodLvl?moodLvl.e:"—")+" "+(enLvl?enLvl.e:"—")+" "+(calLvl?calLvl.e:"—");
+          const tagsLine = (e.tags&&e.tags.length) ? e.tags.join(", ") : "";
+          const entry = el("div",{class:"emotion-entry"});
+          entry.appendChild(el("span",{class:"date", html:d.slice(5)}));
+          const body = el("div",{});
+          body.appendChild(el("div",{html: facesLine+"  "+(e.context||"Geral")+(e.note?" — "+e.note:"")}));
+          if(tagsLine) body.appendChild(el("div",{class:"entry-tags", html:tagsLine}));
+          entry.appendChild(body);
+          list.appendChild(entry);
+        });
+        panel.appendChild(list);
+      }
+    }
+    document.getElementById("tabContent").appendChild(panel);
+  }
+
+  function exportData(){
+    try{
+      const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "painel-vida-backup-"+clampToday()+".json";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }catch(e){ alert("Não foi possível exportar o backup: "+e.message); }
+  }
+  function importData(file){
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        const parsed = JSON.parse(ev.target.result);
+        if(!parsed || !parsed.pillars) throw new Error("Arquivo não parece ser um backup válido deste painel.");
+        if(!confirm("Isso vai substituir todos os dados atuais pelos do backup importado. Confirmar?")) return;
+        data = parsed;
+        if(!data.history) data.history = {};
+        if(!data.emotions) data.emotions = {};
+        saveData();
+        currentTab = "overview"; subTab = { overview:"check", emotions:"agora" };
+        render();
+        alert("Backup importado com sucesso!");
+      }catch(e){ alert("Não foi possível importar esse arquivo: "+e.message); }
+    };
+    reader.readAsText(file);
+  }
+
+  function render(){
+    renderHero();
+    renderSectionPill();
+    renderDrawer();
+    const content = document.getElementById("tabContent");
+    content.innerHTML = "";
+    if(currentTab==="overview") renderOverviewPanel();
+    else if(currentTab==="emotions") renderEmotionsPanel();
+    else{
+      const pillar = data.pillars.find(p=>p.id===currentTab);
+      if(pillar) renderPillarPanel(pillar);
+    }
+  }
+
+  document.getElementById("menuBtn").addEventListener("click", openDrawer);
+  document.getElementById("closeDrawer").addEventListener("click", closeDrawer);
+  document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
+  document.getElementById("exportBtn").addEventListener("click", exportData);
+  document.getElementById("importFile").addEventListener("change", (e)=>{
+    if(e.target.files[0]) importData(e.target.files[0]);
+    e.target.value = "";
+  });
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    if(confirm("Isso vai apagar todos os dados salvos do painel. Confirmar?")){
+      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      data = { pillars: JSON.parse(JSON.stringify(DEFAULT_PILLARS)), history:{}, emotions:{} };
+      currentTab = "overview"; subTab = { overview:"check", emotions:"agora" };
+      render();
+    }
+  });
+
+  // ---- Sincronização via Firebase (opcional) ----
+  let fbSkipped = false;
+  function showFbOverlay(){ document.getElementById("fbOverlay").classList.remove("hidden"); }
+  function hideFbOverlay(){ document.getElementById("fbOverlay").classList.add("hidden"); }
+
+  function initFirebaseUI(){
+    if(!(window.__fb && window.__fb.ready)) return; // sem config: segue só local, overlay nunca aparece
+
+    const emailInp = document.getElementById("fbEmail");
+    const passInp = document.getElementById("fbPass");
+    const errEl = document.getElementById("fbError");
+    const statusEl = document.getElementById("fbStatus");
+
+    document.getElementById("fbSkipBtn").addEventListener("click", ()=>{ fbSkipped = true; hideFbOverlay(); render(); });
+
+    document.getElementById("fbLoginBtn").addEventListener("click", async ()=>{
+      errEl.textContent = ""; statusEl.textContent = "Entrando...";
+      try{ await window.__fb.signIn(emailInp.value.trim(), passInp.value); }
+      catch(e){ statusEl.textContent = ""; errEl.textContent = "Não foi possível entrar: verifique e-mail e senha."; }
+    });
+    document.getElementById("fbSignupBtn").addEventListener("click", async ()=>{
+      errEl.textContent = ""; statusEl.textContent = "Criando conta...";
+      try{ await window.__fb.signUp(emailInp.value.trim(), passInp.value); }
+      catch(e){ statusEl.textContent = ""; errEl.textContent = "Não foi possível criar a conta (e-mail já usado ou senha muito curta)."; }
+    });
+
+    window.addEventListener("fb-auth-changed", async (ev)=>{
+      const user = ev.detail.user;
+      if(user){
+        statusEl.textContent = "Sincronizando...";
+        const cloudData = await window.__fb.load();
+        if(cloudData && cloudData.pillars){
+          data = cloudData;
+          if(!data.emotions) data.emotions = {};
+          if(!data.history) data.history = {};
+          saveData();
+        } else {
+          window.__fb.save(data);
+        }
+        hideFbOverlay();
+        currentTab = "overview";
+        render();
+      } else if(!fbSkipped){
+        showFbOverlay();
+      }
+    });
+  }
+  if(window.__fb) initFirebaseUI();
+  else window.addEventListener("fb-module-ready", initFirebaseUI);
+
+  render();
+})();
+</script>
+</body>
+</html>
